@@ -1,0 +1,9 @@
+@baseUrl = http://localhost:8080
+
+### Create job
+POST {{baseUrl}}/jobs
+Content-Type: application/json
+
+{
+  "command": "echo hello"
+}

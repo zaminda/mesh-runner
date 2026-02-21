@@ -7,3 +7,7 @@ Content-Type: application/json
 {
   "command": "echo hello"
 }
+
+### List jobs
+GET {{baseUrl}}/jobs
+Content-Type: application/json

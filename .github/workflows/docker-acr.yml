@@ -24,9 +24,17 @@ jobs:
           username: robinhood
           password: ${{ secrets.ROBINHOOD_KEY }}
 
-      - name: Build and push
+      - name: Build and push api
         uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: robinhood.azurecr.io/mesh-runner:latest
+          tags: robinhood.azurecr.io/mesh-runner/api:latest
+
+      - name: Build and push worker
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile.worker
+          push: true
+          tags: robinhood.azurecr.io/mesh-runner/worker:latest

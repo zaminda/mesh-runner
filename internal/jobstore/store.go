@@ -26,7 +26,7 @@ func (s *Store) Create(command string) internal.Job {
 	job := internal.Job{
 		ID:        s.nextID,
 		Command:   command,
-		Status:    "pending",
+		Status:    internal.Pending,
 		CreatedAt: time.Now().UTC(),
 	}
 	s.nextID++

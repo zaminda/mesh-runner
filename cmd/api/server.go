@@ -11,11 +11,14 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/nats-io/nats.go"
+	"github.com/zaminda/mesh-runner/internal"
 	"github.com/zaminda/mesh-runner/internal/jobstore"
 )
 
 type server struct {
-	store *jobstore.Store
+	store    *jobstore.Store
+	natsConn *nats.Conn
 }
 
 type createJobRequest struct {
@@ -39,8 +42,11 @@ type listJobsResponse struct {
 }
 
 func newServer() *server {
+
+	conn, _ := nats.Connect("nats://localhost:4222")
 	return &server{
-		store: jobstore.New(),
+		store:    jobstore.New(),
+		natsConn: conn,
 	}
 }
 
@@ -169,6 +175,13 @@ func (s *server) handleCreateJob(w http.ResponseWriter, r *http.Request) {
 	}
 
 	job := s.store.Create(payload.Command)
+
+	jobJson, _ := json.Marshal(job)
+
+	err := s.natsConn.Publish(internal.RequestNATSSubject, jobJson)
+	if err != nil {
+		log.Printf("error publishing job: %v", err)
+	}
 
 	response := createJobResponse{
 		ID:        job.ID,

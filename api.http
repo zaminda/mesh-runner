@@ -11,3 +11,8 @@ Content-Type: application/json
 ### List jobs
 GET {{baseUrl}}/jobs
 Content-Type: application/json
+
+
+
+### Worker debug
+GET http://localhost:8090

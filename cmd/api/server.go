@@ -50,7 +50,8 @@ func newServer() *server {
 
 	conn, err := nats.Connect(natsURL)
 	if err != nil {
-		log.Fatalf("failed to connect to NATS: %v", err)
+		//log.Fatalf("failed to connect to NATS: %v", err)
+		panic(err)
 	}
 	return &server{
 		store:    jobstore.New(),

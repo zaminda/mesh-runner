@@ -19,7 +19,7 @@ func main() {
 
 	nc, err := nats.Connect(natsURL)
 	if err != nil {
-		log.Fatalf("failed to connect to NATS: %v", err)
+		panic(err)
 	}
 	defer nc.Close()
 

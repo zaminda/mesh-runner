@@ -21,7 +21,7 @@ spec:
             - containerPort: 8080
           env:
             - name: NATS_URL
-              value: "nats://nats:4220"
+              value: "nats://nats:4222"
           readinessProbe:
             httpGet:
               path: /health
@@ -64,4 +64,4 @@ spec:
           image: robinhood.azurecr.io/mesh-runner/worker:latest
           env:
             - name: NATS_URL
-              value: "nats://nats:4220"
+              value: "nats://nats:4222"

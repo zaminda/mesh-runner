@@ -42,8 +42,16 @@ type listJobsResponse struct {
 }
 
 func newServer() *server {
+	natsURL := os.Getenv("NATS_URL")
 
-	conn, _ := nats.Connect("nats://localhost:4222")
+	if natsURL == "" {
+		natsURL = "nats://localhost:4222"
+	}
+
+	conn, err := nats.Connect(natsURL)
+	if err != nil {
+		log.Fatalf("failed to connect to NATS: %v", err)
+	}
 	return &server{
 		store:    jobstore.New(),
 		natsConn: conn,
@@ -130,7 +138,7 @@ func (s *server) handleJobs(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (s *server) handleListJobs(w http.ResponseWriter, r *http.Request) {
+func (s *server) handleListJobs(w http.ResponseWriter, _ *http.Request) {
 	jobs := s.store.List()
 
 	summaries := make([]jobSummary, len(jobs))

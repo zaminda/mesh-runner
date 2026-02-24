@@ -16,9 +16,12 @@ spec:
     spec:
       containers:
         - name: api
-          image: robinhood.azurecr.io/mesh-runner:latest
+          image: robinhood.azurecr.io/mesh-runner/api:latest
           ports:
             - containerPort: 8080
+          env:
+            - name: NATS_URL
+              value: "nats://nats:4220"
           readinessProbe:
             httpGet:
               path: /health
@@ -39,3 +42,26 @@ spec:
   ports:
     - port: 80
       targetPort: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mesh-runner-worker
+  labels:
+    app: mesh-runner-worker
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: mesh-runner-worker
+  template:
+    metadata:
+      labels:
+        app: mesh-runner-worker
+    spec:
+      containers:
+        - name: worker
+          image: robinhood.azurecr.io/mesh-runner/worker:latest
+          env:
+            - name: NATS_URL
+              value: "nats://nats:4220"

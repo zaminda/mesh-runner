@@ -12,6 +12,14 @@ import (
 )
 
 func main() {
+	// Detect if running in Kubernetes
+	inKubernetes := os.Getenv("KUBERNETES_SERVICE_HOST") != ""
+	if inKubernetes {
+		log.Println("Running in Kubernetes environment")
+	} else {
+		log.Println("Running in non-Kubernetes environment")
+	}
+
 	natsURL := os.Getenv("NATS_URL")
 	if natsURL == "" {
 		natsURL = "nats://localhost:4222"

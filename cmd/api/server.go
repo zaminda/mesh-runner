@@ -104,6 +104,8 @@ func (s *server) routes() http.Handler {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/health", s.logRequest(s.handleHealth))
 	mux.HandleFunc("/jobs", s.logRequest(s.handleJobs))
+	mux.HandleFunc("/jobs/{jobID}/cancel", s.logRequest(s.handleCancelJob))
+
 	mux.HandleFunc("/", s.logRequest(s.handleRoot))
 	return mux
 }
@@ -204,4 +206,21 @@ func (s *server) handleCreateJob(w http.ResponseWriter, r *http.Request) {
 	if err := json.NewEncoder(w).Encode(response); err != nil {
 		log.Printf("error encoding response: %v", err)
 	}
+}
+
+func (s *server) handleCancelJob(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		w.Header().Set("Content-Type", "text/plain")
+		http.Error(w, "method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	jobIDStr := r.PathValue("jobID")
+	log.Printf("cancel request for job ID: %s", jobIDStr)
+
+	// TODO: Implement job cancellation logic
+
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(`{"message":"job cancellation requested"}`))
 }

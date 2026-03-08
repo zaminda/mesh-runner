@@ -1,4 +1,4 @@
-@baseUrl = http://localhost:8082
+@baseUrl = http://localhost:8080
 
 ### Create job
 POST {{baseUrl}}/jobs
@@ -11,6 +11,9 @@ Content-Type: application/json
 ### List jobs
 GET {{baseUrl}}/jobs
 Content-Type: application/json
+
+### Cancel Job
+POST {{baseUrl}}/jobs/1000/cancel
 
 
 

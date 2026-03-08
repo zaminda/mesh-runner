@@ -50,7 +50,7 @@ metadata:
   labels:
     app: mesh-runner-worker
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: mesh-runner-worker
@@ -59,9 +59,18 @@ spec:
       labels:
         app: mesh-runner-worker
     spec:
+      serviceAccountName: mesh-runner-worker
       containers:
         - name: worker
           image: robinhood.azurecr.io/mesh-runner/worker:latest
           env:
             - name: NATS_URL
               value: "nats://nats:4222"
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
